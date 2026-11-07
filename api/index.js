@@ -2,7 +2,7 @@
 const express = require('express');
 const crypto = require('crypto');
 const { ObjectId } = require('mongodb');
-const { E, db, sign, session, cookies, setCookie, isAdmin, getClub, importClubs } = require('../lib/shared');
+const { E, db, sign, session, cookies, setCookie, isAdmin, getClub, importClubs, importTeams } = require('../lib/shared');
 
 const app = express();
 app.use(express.json({ limit: '1mb' })); // logos are small data URLs
@@ -55,6 +55,7 @@ app.get('/auth/callback', h(async (req, res) => {
 app.get('/auth/logout', (_, res) => { setCookie(res, 'bfl', '', 0); res.redirect('/'); });
 
 // Admin editing: clubs (with logo), games, cups, texts
+app.post('/api/admin/import-teams', admin, h(async (_, res) => res.json(await importTeams())));
 app.post('/api/admin/import', admin, h(async (_, res) => res.json(await importClubs())));
 app.put('/api/admin/texts', admin, h(async (req, res) => {
   await (await db()).collection('settings').updateOne({ _id: 'texts' }, { $set: { pairs: req.body.pairs || [] } }, { upsert: true }); res.sendStatus(204);
