@@ -1,7 +1,0 @@
-{
-  "functions": { "api/*.js": { "maxDuration": 60 } },
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api" },
-    { "source": "/auth/(.*)", "destination": "/api" }
-  ]
-}
