@@ -1,0 +1,167 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BFL Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#06090d;--card:#0c121a;--line:#1a2735;--blue:#3da5f4;--blue2:#86ccff;--text:#eef4fa;--mut:#7f8fa1;--win:#2fbf71;--loss:#e5484d;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#06090d}}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:radial-gradient(900px 400px at 50% -100px,#12324d,transparent),var(--bg);color:var(--text);font:15px/1.5 'DM Sans',system-ui,sans-serif;min-height:100vh}
+h1,h2,h3,.d{font-family:Unbounded,'DM Sans',sans-serif;margin:0}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;gap:4px;justify-content:center;width:max-content;max-width:calc(100% - 24px);overflow-x:auto;margin:12px auto;padding:5px;background:#0a1017ee;border:1px solid var(--line);border-radius:99px;backdrop-filter:blur(10px)}
+nav a{color:var(--mut);text-decoration:none;padding:7px 14px;border-radius:99px;font-weight:700;font-size:13px;white-space:nowrap}
+nav a.on{background:var(--blue);color:#04121f}nav a:focus-visible{outline:2px solid var(--blue2)}
+main{max-width:1100px;margin:0 auto;padding:24px 20px 60px}
+h1{font-size:clamp(28px,5vw,46px);font-weight:800;letter-spacing:-.02em}
+.sub{color:var(--mut);margin:6px 0 24px}h2{font-size:18px;margin:32px 0 12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px}
+.hero{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;padding:32px;text-align:center;background:linear-gradient(100deg,#3da5f433,transparent 40%,transparent 60%,#3da5f433),var(--card)}
+.hero .t{font-family:Unbounded;font-weight:800;font-size:clamp(14px,2.5vw,22px)}
+.hero .ko{font-family:Unbounded;font-weight:800;font-size:clamp(32px,7vw,64px);line-height:1}
+.badge{width:64px;height:64px;border-radius:50%;margin:0 auto 10px;display:grid;place-items:center;font:800 20px Unbounded;background:#16324a;color:var(--blue2);border:2px solid var(--blue)}
+.row{display:flex;align-items:center;gap:12px;padding:12px 16px;border-top:1px solid var(--line)}.row:first-child{border:0}
+.row .g{flex:1;min-width:0}.mut{color:var(--mut);font-size:13px}.sc{font:700 16px Unbounded}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+table{width:100%;border-collapse:collapse}td,th{padding:9px 12px;text-align:right;border-top:1px solid var(--line);font-size:14px}th{color:var(--mut);font-weight:500;border:0}td:nth-child(2),th:nth-child(2){text-align:left}
+tr.me td{color:var(--blue2);font-weight:700}
+.pill{padding:3px 9px;border-radius:99px;background:#3da5f41f;color:var(--blue2);font-size:12px;font-weight:700}
+.tabs{display:flex;gap:6px;margin-bottom:12px}.tabs button{background:none;border:1px solid var(--line);color:var(--mut);padding:6px 14px;border-radius:99px;cursor:pointer;font:700 13px 'DM Sans'}.tabs button.on{background:var(--blue);color:#04121f;border-color:var(--blue)}
+.btn{background:var(--blue);color:#04121f;border:0;padding:10px 18px;border-radius:99px;font:700 14px 'DM Sans';cursor:pointer}.btn:hover{background:var(--blue2)}
+.lock{padding:24px;border-style:dashed;max-width:520px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin:16px 0}.stats div{padding:14px 16px}.stats b{display:block;font:800 22px Unbounded}
+.form i{display:inline-block;width:20px;height:20px;border-radius:5px;margin-right:3px;font:700 11px/20px 'DM Sans';text-align:center;font-style:normal;color:#06140c}
+.W{background:var(--win)}.D{background:#8795a5}.L{background:var(--loss);color:#fff!important}
+input{width:100%;min-width:90px;background:#08101a;border:1px solid var(--line);color:var(--text);border-radius:8px;padding:6px 8px;font:14px 'DM Sans'}input:focus-visible{outline:2px solid var(--blue2)}td:has(input){text-align:left}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--blue);color:#04121f;padding:10px 18px;border-radius:99px;font-weight:700;z-index:9}
+.bracket{display:flex;gap:16px;overflow-x:auto;padding-bottom:12px}.rd{flex:0 0 230px;display:flex;flex-direction:column;justify-content:space-around;gap:12px}.rn{font-size:12px;font-weight:700}
+.tie .tr{display:flex;align-items:center;gap:8px;padding:8px 10px;color:var(--mut)}.tie .tr+.tr{border-top:1px solid var(--line)}.tie .tr.w{color:var(--text);font-weight:700}.tie .when{padding:2px 10px 8px;font-size:12px}
+.cuphead{display:flex;align-items:center;gap:16px}.board .badge{display:inline-grid;vertical-align:middle;margin-right:8px}
+a.row:focus-visible{outline:2px solid var(--blue2);outline-offset:-2px}
+.note{font-size:12px;color:var(--mut);margin-top:30px}
+@media(max-width:600px){.hero{padding:20px 10px}main{padding:16px 12px}}
+.card{position:relative;--mx:50%;--my:50%}
+.card::before,.card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .45s ease}
+.card::before{background:radial-gradient(circle 240px at var(--mx) var(--my),#ffffff1a,transparent 70%)}
+.card::after{padding:1px;background:radial-gradient(circle 180px at var(--mx) var(--my),#ffffff80,transparent 70%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+.card:hover::before,.card:hover::after{opacity:1}
+.card,.row,tr,.btn,nav a,.tabs button,input{transition:background-color .3s ease,border-color .3s ease,box-shadow .35s ease,transform .35s cubic-bezier(.2,.7,.2,1),color .25s ease}
+.card:hover{border-color:#ffffff1f}
+.stats .card:hover{transform:translateY(-4px)}
+.row:hover,tr:hover td{background:#3da5f410}
+.btn:hover{transform:translateY(-1px)}.btn:active{transform:scale(.96)}
+nav a:hover:not(.on){color:var(--text);background:#ffffff0d}
+.tabs button:hover:not(.on){color:var(--text);border-color:var(--blue)}
+.form i{transition:transform .25s}.form i:hover{transform:translateY(-2px)}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body>
+<nav id="nav"></nav><main id="app"></main>
+<script>
+// ---- Data layer: uses your backend when /api exists, otherwise demo data ----
+const DEMO={
+ cups:[{id:'bfl',name:'BFL Cup',sub:'Knockout',stage:'Quarter-finals',left:'4 ties to play',note:'28 ties, 24 decided',
+ rounds:[{n:'Round of 16',ties:[['Goteborg',2,'Seelo',5,'Wed 21 Oct 21:00'],['Luqmania',4,'Billericay',1,'Thu 29 Oct 21:30'],['Amsterdam',3,'Vitesse',2,'Wed 28 Oct 22:00'],['Richmond',0,'Oakford',10,'Wed 21 Oct 21:30'],['Rangers',8,'Southend United',2,'Wed 28 Oct 22:00'],['Highfield FC',0,'Silverthorn',4],['AFC Milan',7,'RZD Zelitex',1],['AS Roma',6,'Elgin City',2]]},
+ {n:'Quarter-finals',ties:[['Seelo',null,'Luqmania',null,'Wed 4 Nov 21:00'],['Amsterdam',null,'Oakford',null,'Thu 5 Nov 20:00'],['Rangers',null,'Silverthorn',null,'Thu 5 Nov 21:00'],['AFC Milan',null,'AS Roma',null,'Tue 3 Nov 21:00']]},
+ {n:'Semi-finals',ties:[['TBC',null,'TBC',null],['TBC',null,'TBC',null]]},{n:'Final',ties:[['TBC',null,'TBC',null]]}],
+ board:[['Rangers',2,2,0,0,18,2,'In the Quarter-finals'],['AFC Milan',2,2,0,0,15,1,'In the Quarter-finals'],['Silverthorn',2,2,0,0,14,0,'In the Quarter-finals'],['Seelo',2,2,0,0,15,2,'In the Quarter-finals'],['AS Roma',2,2,0,0,13,2,'In the Quarter-finals'],['Oakford',2,2,0,0,13,2,'In the Quarter-finals'],['Amsterdam',2,2,0,0,7,2,'In the Quarter-finals'],['Luqmania',2,2,0,0,7,2,'In the Quarter-finals'],['Billericay',2,1,0,1,11,4,'Sent off in the Round of 16'],['RZD Zelitex',2,1,0,1,11,5,'Sent off in the Round of 16'],['Southend United',2,1,0,1,12,8,'Sent off in the Round of 16']]},
+ {id:'peak',name:'Peak Sports Trophy',sub:'Group stage, then a knockout',stage:'Round of 16',left:'8 ties to play'},
+ {id:'d1',name:'Division One Cup',sub:'Knockout',stage:'Semi-finals',left:'2 ties to play'},
+ {id:'nl',name:'National League Cup',sub:'Knockout',stage:'Semi-finals',left:'2 ties to play'}],
+ clubs:[{_id:1,name:'Hashtag City',division:'Division Three',points:7,value:'12.4M'},{_id:2,name:'AFC Milan',division:'Division Three',points:25,value:'30M'},{_id:3,name:'Rentford',division:'Division One',points:14,value:'41M'}],
+ me:{robloxName:'henrii2024',isAdmin:true,club:{name:'Hashtag City',short:'HC',role:'Owner',division:'Division Three',pos:6,pts:7,value:'12.4M',
+  squad:[{n:'henrii2024',p:'ST',g:5,a:2},{n:'Kobo_77',p:'CM',g:2,a:6},{n:'ZedLane',p:'CB',g:0,a:1},{n:'Mirko_FC',p:'GK',g:0,a:0}]},
+  career:{matches:41,goals:19,assists:11,coins:2350}},
+ divisions:[{id:'D1',name:'Division One',rows:[['Rentford',7,25,14,'LWWWD'],['RZD Zelitex',7,16,13,'WWWLD'],['Silverthorn',7,26,12,'LLLWW'],['Seelo',7,13,10,'WWLWL']]},
+  {id:'D2',name:'Division Two',rows:[['Crusaders',8,20,25,'WWWDW'],['Oakford',8,9,21,'WLWWW']]},
+  {id:'D3',name:'Division Three',rows:[['AFC Milan',8,31,25,'WWWWW'],['Hashtag City',7,-12,7,'LLDWL'],['Southend United',7,-4,9,'LWLDW']]},
+  {id:'D4',name:'Division Four',rows:[['Husavik Huskies',7,15,18,'WWDWW']]}],
+ games:[{_id:'g1',date:'2026-11-07',time:'20:00',home:'Hashtag City',away:'Southend United',hs:null,as:null,div:'D3'},{_id:'g2',date:'2026-11-07',time:'20:30',home:'Oakford',away:'Manchester',hs:null,as:null,div:'D2'},{_id:'g3',date:'2026-11-07',time:'21:00',home:'Copenhagen FC',away:'Highfield FC',hs:null,as:null,div:'D3'},
+ {_id:'g4',date:'2026-11-06',time:'20:00',home:'AFC Milan',away:'Seattle United',hs:10,as:0,div:'D3'},{_id:'g5',date:'2026-11-06',time:'20:30',home:'Crusaders',away:'Spen Valley',hs:3,as:0,div:'D2'},{_id:'g6',date:'2026-11-06',time:'21:00',home:'Vitesse',away:'Pietinis Vilkas',hs:4,as:2,div:'D3'}]
+};
+let S={user:null,data:DEMO,live:false,div:'D1',clubs:null,text:{}};let LOGO={};
+async function load(){try{const h=await fetch('/api/hub');if(!h.ok)throw 0;const j=await h.json();S.data={...DEMO,...j};S.text=Object.fromEntries(j.texts||[]);S.live=true;
+ const m=await fetch('/api/me');if(m.ok)S.user=await m.json();}catch(e){}norm();render()}
+async function loadClubs(){try{if(S.live){const r=await fetch('/api/admin/clubs');S.clubs=r.ok?await r.json():[]}else S.clubs=JSON.parse(JSON.stringify(DEMO.clubs))}catch(e){S.clubs=[]}render()}
+async function saveClub(i){const c=S.clubs[i],g=x=>document.getElementById(x+i).value;Object.assign(c,{name:g('n'),division:g('d'),points:+g('p'),value:g('v')});
+ if(S.live)await fetch('/api/admin/clubs/'+c._id,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(c)});toast('Saved '+c.name)}
+async function importClubs(){if(S.live){const r=await(await fetch('/api/admin/import',{method:'POST'})).json();toast('Imported '+r.clubs+' clubs, linked '+r.linked+' players')}else toast('Demo: the bot imports your Discord club roles here');await load()}
+function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),2500)}
+const J={'Content-Type':'application/json'};
+const COLS={clubs:[['name','Club'],['division','Division'],['points','Pts','number'],['value','Value']],
+ games:[['date','Date','date'],['time','Time','time'],['home','Home'],['away','Away'],['hs','H','number'],['as','A','number'],['div','Div'],['cup','Cup id'],['round','Round']],
+ cups:[['id','Id'],['name','Name'],['sub','Type'],['stage','Stage'],['left','Left'],['note','Note'],['roundNames','Rounds (comma separated)']]};
+// Builds fixtures, results, logos and cup brackets from the editable data
+function norm(){const d=S.data;LOGO={};d.clubs.forEach(c=>{if(c.logo)LOGO[c.name]=c.logo});
+ const gs=[...d.games].sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)),pl=g=>g.hs!=null&&g.as!=null;
+ d.fixtures=gs.filter(g=>!pl(g)).map(g=>[g.time,g.home,g.away,g.div]);d.results=gs.filter(pl).reverse().map(g=>[g.home,g.hs,g.away,g.as,g.div]);
+ d.cups.forEach(c=>{const names=(c.roundNames||'').split(',').map(s=>s.trim()).filter(Boolean),cg=gs.filter(g=>g.cup==c.id);if(!names.length||!cg.length)return;
+  c.rounds=names.map(n=>({n,ties:cg.filter(g=>g.round==n).map(g=>[g.home,g.hs,g.away,g.as,g.date+' '+g.time])}));const T={},get=n=>T[n]=T[n]||[n,0,0,0,0,0,0,0];
+  cg.filter(pl).forEach(g=>[[g.home,g.hs,g.as],[g.away,g.as,g.hs]].forEach(([n,f,a])=>{const t=get(n);t[1]++;t[5]+=f;t[6]+=a;f>a?t[2]++:f<a?t[4]++:t[3]++}));
+  cg.forEach(g=>[g.home,g.away].forEach(n=>{const t=get(n);t[7]=Math.max(t[7],names.indexOf(g.round))}));
+  c.board=Object.values(T).sort((a,b)=>b[7]-a[7]||(b[5]-b[6])-(a[5]-a[6])).map(t=>[...t.slice(0,7),'Reached: '+names[t[7]]])})}
+// Site text: replaces any text you edited in the admin Texts tab
+function applyText(){const m=S.text;if(!m||!Object.keys(m).length)return;[$('#nav'),$('#app')].forEach(r=>{const w=document.createTreeWalker(r,NodeFilter.SHOW_TEXT);let n;while(n=w.nextNode()){const s=n.nodeValue.trim();if(m[s]&&!n.parentElement.closest('.admin'))n.nodeValue=n.nodeValue.replace(s,m[s])}})}
+function collectTexts(){const names=new Set(S.data.clubs.map(c=>c.name)),seen=new Set(['Home','League','Store','My career','My club','Admin','Sign out']),box=document.createElement('div');
+ for(const k of Object.keys(P)){if(k=='admin'||k=='cup')continue;box.innerHTML=P[k]();const w=document.createTreeWalker(box,NodeFilter.SHOW_TEXT);let n;while(n=w.nextNode()){const s=n.nodeValue.trim();if(s.length>1&&!/^[\d\s+\-.:%€#\/]+$/.test(s)&&!names.has(s))seen.add(s)}}return[...seen]}
+function setText(i,v){const s=S.tlist[i];v.trim()?S.text[s]=v:delete S.text[s]}
+async function saveTexts(){if(S.live)await fetch('/api/admin/texts',{method:'PUT',headers:J,body:JSON.stringify({pairs:Object.entries(S.text)})});render();toast('Texts saved')}
+async function aSave(col,i){const row=S.data[col][i];COLS[col].forEach(([k,,ty])=>{const v=document.getElementById('a'+col+k+i).value;row[k]=ty=='number'?(v===''?null:+v):v});
+ if(S.live)await fetch('/api/admin/'+col+'/'+row._id,{method:'PATCH',headers:J,body:JSON.stringify(row)});norm();render();toast('Saved')}
+async function aAdd(col){let row={};COLS[col].forEach(([k,,ty])=>row[k]=ty=='number'?null:'');
+ if(S.live)row=await(await fetch('/api/admin/'+col,{method:'POST',headers:J,body:JSON.stringify(row)})).json();else row._id='n'+Date.now();S.data[col].unshift(row);render()}
+async function aDel(col,i){const r=S.data[col][i];if(!confirm('Delete this row?'))return;if(S.live)await fetch('/api/admin/'+col+'/'+r._id,{method:'DELETE'});S.data[col].splice(i,1);norm();render()}
+function aLogo(i,inp){const f=inp.files[0];if(!f)return;const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>{const s=Math.min(1,160/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);S.data.clubs[i].logo=c.toDataURL('image/png');aSave('clubs',i)};im.src=fr.result};fr.readAsDataURL(f)}
+function signIn(){S.live?location.href='/auth/roblox':(S.user=DEMO.me,render())}
+function signOut(){S.live?location.href='/auth/logout':(S.user=null,render())}
+const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const badge=n=>LOGO[n]?`<img src="${LOGO[n]}" alt="" style="width:28px;height:28px;object-fit:contain;vertical-align:middle">`:`<span class="badge" style="width:28px;height:28px;font-size:10px;margin:0">${esc(n.slice(0,2).toUpperCase())}</span>`;
+const big=n=>LOGO[n]?`<img class="badge" src="${LOGO[n]}" alt="" style="object-fit:contain;border:0;background:none;width:84px;height:84px">`:`<div class="badge">${esc(n.slice(0,2))}</div>`;
+const form=f=>`<span class="form">${[...f].map(c=>`<i class="${c}">${c}</i>`).join('')}</span>`;
+const table=r=>`<table><tr><th>#</th><th>Club</th><th>P</th><th>GD</th><th>Pts</th><th>Form</th></tr>${r.map((x,i)=>`<tr class="${S.user&&S.user.club&&x[0]==S.user.club.name?'me':''}"><td>${i+1}</td><td>${esc(x[0])}</td><td>${x[1]}</td><td>${x[2]>0?'+':''}${x[2]}</td><td>${x[3]}</td><td>${form(x[4])}</td></tr>`).join('')}</table>`;
+const results=()=>S.data.results.map(r=>`<div class="row">${badge(r[0])}<div class="g"><b>${esc(r[0])}</b><br><span class="mut">${esc(r[2])}</span></div><div class="sc">${r[1]}<br>${r[3]}</div><span class="pill">${r[4]}</span></div>`).join('');
+const fixtures=()=>S.data.fixtures.map(f=>`<div class="row"><b>${f[0]}</b><div class="g">${esc(f[1])}<br><span class="mut">${esc(f[2])}</span></div><span class="pill">${f[3]}</span></div>`).join('');
+const P={
+home(){const u=S.user,n=S.data.fixtures[0]||['--:--','TBC','TBC',''];return `<p class="mut">Season 13 · Matchweek 8 of 11</p><h1>Good afternoon${u?', '+esc(u.robloxName):''}</h1>
+<div class="card hero" style="margin-top:20px"><div>${big(n[1])}<div class="t">${esc(n[1])}</div></div>
+<div><div class="mut">Next match · Today</div><div class="ko">${n[0]}</div><div class="mut">${n[3]} Matchweek 9</div></div>
+<div>${big(n[2])}<div class="t">${esc(n[2])}</div></div></div>
+<div class="grid"><div><h2>Standings</h2><div class="tabs">${S.data.divisions.map(d=>`<button class="${d.id==S.div?'on':''}" onclick="S.div='${d.id}';render()">${d.id}</button>`).join('')}</div><div class="card">${table(S.data.divisions.find(d=>d.id==S.div).rows)}</div></div>
+<div><h2>Latest results</h2><div class="card">${results()}</div></div></div>`},
+league(){return `<h1>League</h1><p class="sub">Season 13 · ${S.data.divisions.length} divisions</p>
+<h2>Divisions</h2><div class="card">${S.data.divisions.map(d=>`<div class="row"><b class="d" style="width:46px;color:var(--blue)">${d.id}</b><div class="g"><b>${d.name}</b><br><span class="mut">${esc(d.rows[0][0])} lead on ${d.rows[0][3]} pts</span></div></div>`).join('')}</div>
+<h2>Cups</h2><div class="card">${S.data.cups.map(c=>`<a class="row" href="#cup-${c.id}" style="color:inherit;text-decoration:none">${badge(c.name)}<div class="g"><b>${esc(c.name)}</b><br><span class="mut">${esc(c.sub)}</span></div><div style="text-align:right"><b>${esc(c.stage)}</b><br><span class="mut">${esc(c.left)}</span></div></a>`).join('')}</div>
+<div class="grid"><div><h2>Fixtures ahead</h2><div class="card">${fixtures()}</div></div><div><h2>Latest results</h2><div class="card">${results()}</div></div></div>`},
+admin(){const u=S.user;if(!u||!u.isAdmin)return `<h1>Admin</h1><div class="card lock" style="margin-top:20px"><b>Admins only.</b><p class="mut">Sign in with an admin account to edit clubs.</p></div>`;
+if(!S.clubs)return '<h1>Admin</h1><p class="mut">Loading clubs…</p>';
+return `<h1>Admin</h1><p class="sub">Clubs come from the club roles on your Discord server. Import them, then edit the details here.</p><button class="btn" onclick="importClubs()">Import clubs from Discord</button><h2>Clubs (${S.clubs.length})</h2><div class="card" style="overflow-x:auto"><table><tr><th>#</th><th>Club</th><th>Division</th><th>Points</th><th>Value</th><th></th></tr>${S.clubs.map((c,i)=>`<tr><td>${i+1}</td><td><input id="n${i}" value="${esc(c.name)}"></td><td><input id="d${i}" value="${esc(c.division||'')}"></td><td><input id="p${i}" type="number" value="${c.points||0}"></td><td><input id="v${i}" value="${esc(c.value||'')}"></td><td><button class="btn" onclick="saveClub(${i})">Save</button></td></tr>`).join('')}</table></div>`},
+cup(){const c=S.data.cups.find(x=>'cup-'+x.id==location.hash.slice(1));if(!c)return '<h1>Cup not found</h1><p><a href="#league" style="color:var(--blue2)">Back to the league</a></p>';
+const tab=c.rounds?(S.ctab||'bracket'):'none';
+const row=(n,s,o)=>`<div class="tr ${s==null?'':s>o?'w':''}">${badge(n)}<span class="g">${esc(n)}</span><b>${s??''}</b></div>`;
+const tie=t=>`<div class="card tie">${row(t[0],t[1],t[3])}${row(t[2],t[3],t[1])}${t[4]?`<div class="mut when">${esc(t[4])}</div>`:''}</div>`;
+const body=tab=='bracket'?`<div class="bracket">${c.rounds.map(r=>`<div class="rd"><div class="mut rn">${r.n}</div>${r.ties.map(tie).join('')}</div>`).join('')}</div>`
+:tab=='board'?`<p class="mut">${c.board.length} clubs shown. Sorted by how far each club got, then goal difference.</p><div class="card board" style="overflow-x:auto"><table><tr><th>#</th><th>Club</th><th>Pld</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>Round reached</th></tr>${c.board.map((r,i)=>`<tr><td>${i+1}</td><td>${badge(r[0])}${esc(r[0])}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td><td>${r[5]}</td><td>${r[6]}</td><td>${r[5]-r[6]>0?'+':''}${r[5]-r[6]}</td><td class="mut">${r[7]}</td></tr>`).join('')}</table></div>`
+:'<div class="card lock"><b>Bracket coming soon.</b><p class="mut">The ties for this cup will appear once they are in the database.</p></div>';
+return `<div class="cuphead"><span class="badge" style="width:72px;height:72px;border-radius:18px;margin:0">${esc(c.name.slice(0,2).toUpperCase())}</span><div><h1>${esc(c.name)}</h1><p class="sub" style="margin:4px 0 0">${esc(c.note||c.sub)} · kick-off times in your local timezone</p></div></div>
+<div class="tabs" style="margin:20px 0">${c.rounds?`<button class="${tab=='bracket'?'on':''}" onclick="S.ctab='bracket';render()">Bracket</button><button class="${tab=='board'?'on':''}" onclick="S.ctab='board';render()">Leaderboard</button>`:''}<button onclick="location.hash='league'">Back to league</button></div>${body}`},
+admin(){const u=S.user;if(!u||!u.isAdmin)return `<h1>Admin</h1><div class="card lock" style="margin-top:20px"><b>Admins only.</b><p class="mut">Sign in with an admin account.</p></div>`;
+const t=S.atab||'clubs',tabs=[['clubs','Clubs'],['games','Games'],['cups','Cups'],['texts','Texts']].map(([k,l])=>`<button class="${k==t?'on':''}" onclick="S.atab='${k}';S.tlist=null;render()">${l}</button>`).join('');let body;
+if(t=='texts'){S.tlist=S.tlist||collectTexts();body=`<p class="mut">Every text on the site is listed here. Type a new text to replace it, or leave a field empty to keep the original. Texts that contain club names or numbers are matched as written.</p><div class="card">${S.tlist.map((s,i)=>`<div class="row"><span class="g mut">${esc(s)}</span><input style="max-width:55%" value="${esc(S.text[s]||'')}" placeholder="${esc(s)}" onchange="setText(${i},this.value)"></div>`).join('')}</div><p><button class="btn" onclick="saveTexts()">Save texts</button></p>`}
+else{const C=COLS[t];body=`<p style="display:flex;gap:8px"><button class="btn" onclick="aAdd('${t}')">Add ${t=='games'?'game':t.slice(0,-1)}</button>${t=='clubs'?'<button class="btn" onclick="importClubs()">Import from Discord</button>':''}</p><div class="card" style="overflow-x:auto"><table><tr>${t=='clubs'?'<th>Logo</th>':''}${C.map(c=>`<th>${c[1]}</th>`).join('')}<th></th></tr>${S.data[t].map((r,i)=>`<tr>${t=='clubs'?`<td style="white-space:nowrap">${r.logo?`<img src="${r.logo}" alt="" width="28" height="28" style="object-fit:contain;vertical-align:middle"> `:''}<input type="file" accept="image/*" style="min-width:0;width:150px" onchange="aLogo(${i},this)"></td>`:''}${C.map(([k,,ty])=>`<td><input id="a${t}${k}${i}" type="${ty||'text'}" value="${esc(r[k]??'')}"></td>`).join('')}<td style="white-space:nowrap"><button class="btn" onclick="aSave('${t}',${i})">Save</button> <button class="btn" style="background:#2a1416;color:#ff8a8f" onclick="aDel('${t}',${i})">Delete</button></td></tr>`).join('')}</table></div>${t=='games'?'<p class="mut">A game with both scores filled in counts as played and shows under results. Add a Cup id and Round to place it in that cup\'s bracket.</p>':''}${t=='cups'?'<p class="mut">Rounds in order, e.g. Round of 16,Quarter-finals,Semi-finals,Final. Once games use a cup id, its bracket and leaderboard are built from them.</p>':''}`}
+return `<div class="admin"><h1>Admin</h1><p class="sub">Edit clubs, logos, games, cups and every text on the site.</p><div class="tabs">${tabs}</div>${body}</div>`},
+store(){return `<h1>Store</h1><p class="sub">Spend your BFL Coins.</p><div class="card lock"><b>The store opens soon.</b><p class="mut">Items will be read from the <code>store</code> collection in your database.</p></div>`},
+career(){const u=S.user;if(!u)return lockCard('My career','your matches, goals and coins');const c=u.career;
+return `<h1>My career</h1><p class="sub">${esc(u.robloxName)}</p><div class="stats">${[['Matches',c.matches],['Goals',c.goals],['Assists',c.assists],['Coins',c.coins]].map(s=>`<div class="card"><b>${s[1]}</b><span class="mut">${s[0]}</span></div>`).join('')}</div>`},
+club(){const u=S.user;if(!u)return lockCard('My club','your club');const c=u.club;
+if(!c)return `<h1>My club</h1><div class="card lock"><b>No club found for ${esc(u.robloxName)}.</b><p class="mut">Ask league staff to name you as a manager or owner.</p></div>`;
+return `<h1>${esc(c.name)}</h1><p class="sub">${esc(c.role)} · ${esc(c.division)}</p>
+<div class="stats">${[['Position',c.pos+'th'],['Points',c.pts],['Market value','€'+c.value]].map(s=>`<div class="card"><b>${s[1]}</b><span class="mut">${s[0]}</span></div>`).join('')}</div>
+<h2>Squad</h2><div class="card"><table><tr><th>#</th><th>Player</th><th>Pos</th><th>G</th><th>A</th></tr>${c.squad.map((p,i)=>`<tr><td>${i+1}</td><td>${esc(p.n)}</td><td>${p.p}</td><td>${p.g}</td><td>${p.a}</td></tr>`).join('')}</table></div>`}
+};
+function lockCard(t,w){return `<h1>${t}</h1><div class="card lock" style="margin-top:20px"><b>${t} is locked</b><p class="mut">Sign in with Roblox and this page fills itself with ${w}. Roblox confirms which account is yours; nothing to copy or send.</p><button class="btn" onclick="signIn()">Sign in with Roblox</button></div>`}
+function render(){const k=(location.hash.slice(1)||'home');const p=k.startsWith('cup-')?'cup':P[k]?k:'home';
+$('#nav').innerHTML=[['home','Home'],['league','League'],['store','Store'],['career','My career'],['club','My club']].map(x=>`<a href="#${x[0]}" class="${x[0]==(p=='cup'?'league':p)?'on':''}">${x[1]}</a>`).join('')+(S.user&&S.user.isAdmin?'<a href="#admin" class="'+(p=='admin'?'on':'')+'">Admin</a>':'')+(S.user?`<a href="#" onclick="signOut();return false">Sign out</a>`:'');
+$('#app').innerHTML=P[p]()+(S.live?'':'<p class="note">Demo data. Connect the backend (server.js) to show live data from MongoDB.</p>')
+applyText();if(S.last!==p){S.last=p;if(!matchMedia('(prefers-reduced-motion:reduce)').matches)$('#app').animate([{opacity:0,transform:'translateY(12px)'},{opacity:1,transform:'none'}],{duration:380,easing:'cubic-bezier(.2,.7,.2,1)'})}}
+addEventListener('hashchange',render);load();
+// Soft spotlight that follows the pointer inside each card
+document.addEventListener('pointermove',e=>{const c=e.target.closest&&e.target.closest('.card');if(c){const r=c.getBoundingClientRect();c.style.setProperty('--mx',e.clientX-r.left+'px');c.style.setProperty('--my',e.clientY-r.top+'px')}});
+</script></body></html>
