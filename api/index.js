@@ -45,7 +45,11 @@ app.get('/auth/callback', h(async (req, res) => {
     body: new URLSearchParams({ grant_type: 'authorization_code', code: req.query.code, client_id: E.ROBLOX_ID, client_secret: E.ROBLOX_SECRET }) })).json();
   if (!t.access_token) return res.status(400).send('Roblox sign-in failed.');
   const u = await (await fetch('https://apis.roblox.com/oauth/v1/userinfo', { headers: { Authorization: 'Bearer ' + t.access_token } })).json();
-  setCookie(res, 'bfl', sign({ rid: Number(u.sub), exp: Date.now() + 7 * 864e5 }), 7 * 86400);
+  const rid = Number(u.sub), name = u.preferred_username || u.name || String(rid);
+  // First sign-in creates the player record, so My career and My club open right away
+  await (await db()).collection('players').updateOne({ robloxId: rid },
+    { $set: { robloxName: name }, $setOnInsert: { matches: 0, goals: 0, assists: 0, coins: 0 } }, { upsert: true });
+  setCookie(res, 'bfl', sign({ rid, exp: Date.now() + 7 * 864e5 }), 7 * 86400);
   res.redirect('/#club');
 }));
 app.get('/auth/logout', (_, res) => { setCookie(res, 'bfl', '', 0); res.redirect('/'); });
